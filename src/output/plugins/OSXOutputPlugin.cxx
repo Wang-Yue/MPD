@@ -918,16 +918,17 @@ bool OSXOutput::Pause() {
 	}
 	return true;
 }
-
 void
 OSXOutput::Cancel() noexcept
 {
-	AudioOutputUnitStop(au);
-	ring_buffer->reset();
 #ifdef ENABLE_DSD
-	pcm_export->Reset();
+        pcm_export->Reset();
+        if (!dop_enabled) {
+                ring_buffer->reset();
+        }
+#else
+        ring_buffer->reset();
 #endif
-	AudioOutputUnitStart(au);
 }
 
 int
